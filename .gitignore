@@ -1,0 +1,6 @@
+venv/
+airflow/
+__pycache__
+files/
+
+.DS_Store
