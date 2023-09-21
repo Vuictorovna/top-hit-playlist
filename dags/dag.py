@@ -22,10 +22,10 @@ with DAG(
     start_date=datetime(2023, 9, 20),
     catchup=False,
 ) as dag:
-    # t1 = PythonOperator(
-    #     task_id="extract_data",
-    #     python_callable=extract_data,
-    # )
+    t1 = PythonOperator(
+        task_id="extract_data",
+        python_callable=extract_data,
+    )
 
     t2 = PythonOperator(
         task_id="transform_data",
@@ -37,5 +37,5 @@ with DAG(
         python_callable=load_data,
     )
 
-# t1.set_downstream(t2)
+t1.set_downstream(t2)
 t2.set_downstream(t3)

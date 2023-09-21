@@ -1,12 +1,21 @@
-# Extraction function
-import requests
+from kaggle.api.kaggle_api_extended import KaggleApi
+from airflow.models import Variable
+import os
+
+
+def prepare_env():
+    os.environ["KAGGLE_USERNAME"] = Variable.get("KAGGLE_USERNAME")
+    os.environ["KAGGLE_KEY"] = Variable.get("KAGGLE_KEY")
 
 
 def extract_data():
-    url = "https://www.kaggle.com/datasets/josephinelsy/spotify-top-hit-playlist-2010-2022/download?datasetVersionNumber=1"
-    response = requests.get(url)
-    with open("files/raw_data.csv", "wb") as f:
-        f.write(response.content)
+    prepare_env()
 
+    api = KaggleApi()
+    api.authenticate()
 
-# extract_data()
+    api.dataset_download_file(
+        "josephinelsy/spotify-top-hit-playlist-2010-2022",
+        file_name="playlist_2010to2022.csv",
+        path="files/",
+    )
